@@ -23,3 +23,28 @@
 - FC3: 84→10, Softmax
 - Total params: ~44,426
 
+
+## Task 18: Integration Testing Strategy (Feb 7, 2026)
+
+**CTest Integration Choice:**
+- Added `add_test()` to all puzzle CMakeLists.txt files
+- Only register `*_test_solution` targets (not `*_test` targets)
+- Rationale: Students work on puzzle.cu, but CTest validates solutions work correctly
+
+**README Content Strategy:**
+- Comprehensive documentation over minimalism
+- Target audience: CUDA beginners with C++ knowledge
+- Include practical troubleshooting section (learned from Windows quirks)
+- Provide multiple MNIST download options (official + S3 mirror)
+
+**Multi-Config Generator Handling:**
+- Windows Visual Studio generates Debug/Release folders
+- CTest requires `-C Debug` flag for VS multi-config generators
+- Updated README with Windows-specific executable paths (Debug/ prefix)
+- Linux single-config generators don't need configuration flag
+
+**Documentation Completeness Philosophy:**
+- Every puzzle listed with difficulty rating (⭐ to ⭐⭐⭐⭐⭐)
+- ASCII art architecture diagram (text-based, works in any terminal)
+- Copy-paste ready commands (no placeholders like <repo-url>)
+- Realistic test output examples (actual CTest output format)
