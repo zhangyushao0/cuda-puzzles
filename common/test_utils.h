@@ -7,6 +7,7 @@
 #include <vector>
 #include <string>
 #include <random>
+#include <stdexcept>
 
 // Tolerance-based comparison for floats
 // Formula: |a - b| <= atol + rtol * max(|a|, |b|)
