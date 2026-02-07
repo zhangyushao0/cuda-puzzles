@@ -1,3 +1,4 @@
+#include <catch2/catch_test_macros.hpp>
 // Puzzle 09: Conv2D Backward — Weight & Bias Gradients — Test Harness
 //
 // Tests:
@@ -186,7 +187,7 @@ void run_conv2d_backward_gpu(const float* h_grad_output, const float* h_input,
 //
 // Bias gradient: ∂L/∂bias[0] = sum of grad_out = 9 × 1.0 = 9.0
 
-TEST_CASE(conv_bw_tiny_3x3) {
+TEST_CASE("conv_bw_tiny_3x3", "[puzzle_09_conv_backward_weights]") {
     const int batch = 1, C_in = 1, H = 5, W = 5, C_out = 1, F = 3;
     const int H_out = H - F + 1;  // 3
     const int W_out = W - F + 1;  // 3
@@ -242,7 +243,7 @@ TEST_CASE(conv_bw_tiny_3x3) {
 // Since ∂L/∂output = 1 everywhere (sum loss), grad_output = all 1s.
 // Compare numerical to analytical with relative error < 1e-3.
 
-TEST_CASE(conv_bw_numerical_gradient_check) {
+TEST_CASE("conv_bw_numerical_gradient_check", "[puzzle_09_conv_backward_weights]") {
     // Use small dimensions to keep numerical error manageable
     const int batch = 1, C_in = 1, H = 5, W = 5, C_out = 1, F = 3;
     const int H_out = H - F + 1;  // 3
@@ -365,7 +366,7 @@ TEST_CASE(conv_bw_numerical_gradient_check) {
 // Test 3: LeNet Conv1 dims — batch=1, 1×28×28 → 6×5×5 weight gradient
 // ============================================================
 
-TEST_CASE(conv_bw_lenet_conv1) {
+TEST_CASE("conv_bw_lenet_conv1", "[puzzle_09_conv_backward_weights]") {
     const int batch = 1, C_in = 1, H = 28, W = 28, C_out = 6, F = 5;
     const int H_out = H - F + 1;  // 24
     const int W_out = W - F + 1;  // 24
@@ -421,7 +422,7 @@ TEST_CASE(conv_bw_lenet_conv1) {
 // Test 4: LeNet Conv2 dims — batch=1, 6×12×12 → 16×5×5 weight gradient
 // ============================================================
 
-TEST_CASE(conv_bw_lenet_conv2) {
+TEST_CASE("conv_bw_lenet_conv2", "[puzzle_09_conv_backward_weights]") {
     const int batch = 1, C_in = 6, H = 12, W = 12, C_out = 16, F = 5;
     const int H_out = H - F + 1;  // 8
     const int W_out = W - F + 1;  // 8
@@ -473,6 +474,3 @@ TEST_CASE(conv_bw_lenet_conv2) {
     }
 }
 
-int main() {
-    return RUN_ALL_TESTS();
-}

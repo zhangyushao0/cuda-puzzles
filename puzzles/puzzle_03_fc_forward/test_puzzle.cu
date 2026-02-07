@@ -1,3 +1,4 @@
+#include <catch2/catch_test_macros.hpp>
 // Puzzle 03: Fully Connected Layer (Forward Pass) — Test Harness
 //
 // Tests:
@@ -84,7 +85,7 @@ void run_fc_forward_gpu(const float* h_input, const float* h_weights,
 // output[0] = 1*0.1 + 2*0.2 + 3*0.3 + 4*0.4 + 0.1 = 0.1+0.4+0.9+1.6+0.1 = 3.1
 // output[1] = 1*0.5 + 2*0.6 + 3*0.7 + 4*0.8 + 0.2 = 0.5+1.2+2.1+3.2+0.2 = 7.2
 // output[2] = 1*1.0 + 2*(-1.0) + 3*0.5 + 4*(-0.5) + 0.3 = 1-2+1.5-2+0.3 = -1.2
-TEST_CASE(fc_single_sample_4to3) {
+TEST_CASE("fc_single_sample_4to3", "[puzzle_03_fc_forward]") {
     const int batch = 1, in_features = 4, out_features = 3;
 
     float h_input[] = {1.0f, 2.0f, 3.0f, 4.0f};
@@ -103,14 +104,12 @@ TEST_CASE(fc_single_sample_4to3) {
     run_fc_forward_gpu(h_input, h_weights, h_bias, h_output,
                        batch, in_features, out_features);
 
-    if (!check_array_close(h_output, expected, batch * out_features, 1e-4f, 1e-4f)) {
-        throw std::runtime_error("Single sample 4→3 FC mismatch");
-    }
+    REQUIRE(check_array_close(h_output, expected, batch * out_features, 1e-4f, 1e-4f));
 }
 
 // Test 2: Batch=8, 256→120 — LeNet FC1 dimensions
 // FC1 takes the 4×4×16=256 flattened feature maps and outputs 120 features
-TEST_CASE(fc_lenet_fc1_256to120) {
+TEST_CASE("fc_lenet_fc1_256to120", "[puzzle_03_fc_forward]") {
     const int batch = 8, in_features = 256, out_features = 120;
     const int input_size  = batch * in_features;
     const int weight_size = out_features * in_features;
@@ -139,7 +138,7 @@ TEST_CASE(fc_lenet_fc1_256to120) {
 }
 
 // Test 3: Batch=8, 120→84 — LeNet FC2 dimensions
-TEST_CASE(fc_lenet_fc2_120to84) {
+TEST_CASE("fc_lenet_fc2_120to84", "[puzzle_03_fc_forward]") {
     const int batch = 8, in_features = 120, out_features = 84;
     const int input_size  = batch * in_features;
     const int weight_size = out_features * in_features;
@@ -168,7 +167,7 @@ TEST_CASE(fc_lenet_fc2_120to84) {
 
 // Test 4: Batch=8, 84→10 — LeNet FC3 (output layer)
 // This is the final layer that produces class scores for 10 digits
-TEST_CASE(fc_lenet_fc3_84to10) {
+TEST_CASE("fc_lenet_fc3_84to10", "[puzzle_03_fc_forward]") {
     const int batch = 8, in_features = 84, out_features = 10;
     const int input_size  = batch * in_features;
     const int weight_size = out_features * in_features;
@@ -195,6 +194,3 @@ TEST_CASE(fc_lenet_fc3_84to10) {
     }
 }
 
-int main() {
-    return RUN_ALL_TESTS();
-}

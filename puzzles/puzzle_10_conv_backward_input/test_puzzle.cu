@@ -1,3 +1,4 @@
+#include <catch2/catch_test_macros.hpp>
 // Puzzle 10: Conv2D Backward Pass — Input Gradient — Test Harness
 //
 // Tests:
@@ -160,7 +161,7 @@ void run_conv2d_backward_input_gpu(const float* h_grad_output,
 //   [2, 4, 6, 4, 2]
 //   [1, 2, 3, 2, 1]
 
-TEST_CASE(conv_backward_input_tiny) {
+TEST_CASE("conv_backward_input_tiny", "[puzzle_10_conv_backward_input]") {
     const int batch = 1, C_in = 1, H = 5, W = 5, C_out = 1, F = 3;
 
     // Filter: all ones
@@ -199,7 +200,7 @@ TEST_CASE(conv_backward_input_tiny) {
 // Compare to analytical grad_input[idx] with relative error < 1e-2.
 // (float32 finite-difference has limited precision due to accumulation noise)
 
-TEST_CASE(conv_backward_input_numerical_gradient_check) {
+TEST_CASE("conv_backward_input_numerical_gradient_check", "[puzzle_10_conv_backward_input]") {
     const int batch = 1, C_in = 1, H = 5, W = 5, C_out = 1, F = 3;
     const float epsilon = 1e-3f;
     const float rel_tol = 1e-2f;
@@ -285,7 +286,7 @@ TEST_CASE(conv_backward_input_numerical_gradient_check) {
 // Conv1 forward: input 1×28×28, filter (6,1,5,5) → output 6×24×24
 // Conv1 backward: grad_output 6×24×24 → grad_input 1×28×28
 
-TEST_CASE(conv_backward_input_lenet_conv1) {
+TEST_CASE("conv_backward_input_lenet_conv1", "[puzzle_10_conv_backward_input]") {
     const int batch = 1, C_in = 1, H = 28, W = 28, C_out = 6, F = 5;
     const int H_out = H - F + 1;  // 24
     const int W_out = W - F + 1;  // 24
@@ -320,7 +321,7 @@ TEST_CASE(conv_backward_input_lenet_conv1) {
 // Conv2 forward: input 6×12×12, filter (16,6,5,5) → output 16×8×8
 // Conv2 backward: grad_output 16×8×8 → grad_input 6×12×12
 
-TEST_CASE(conv_backward_input_lenet_conv2) {
+TEST_CASE("conv_backward_input_lenet_conv2", "[puzzle_10_conv_backward_input]") {
     const int batch = 1, C_in = 6, H = 12, W = 12, C_out = 16, F = 5;
     const int H_out = H - F + 1;  // 8
     const int W_out = W - F + 1;  // 8
@@ -348,6 +349,3 @@ TEST_CASE(conv_backward_input_lenet_conv2) {
     }
 }
 
-int main() {
-    return RUN_ALL_TESTS();
-}

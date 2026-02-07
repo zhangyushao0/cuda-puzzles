@@ -1,3 +1,4 @@
+#include <catch2/catch_test_macros.hpp>
 // Puzzle 04: ReLU Forward + Backward — Test Harness
 //
 // Tests:
@@ -70,7 +71,7 @@ void run_relu_backward_gpu(const float* h_grad_output, const float* h_input,
 //   - Negative values → clamped to 0
 //   - Zero → stays 0
 //   - Positive values → pass through unchanged
-TEST_CASE(relu_forward_neg_zero_pos) {
+TEST_CASE("relu_forward_neg_zero_pos", "[puzzle_04_relu]") {
     const int n = 8;
 
     float h_input[]    = {-3.0f, -1.0f, -0.5f,  0.0f,  0.5f,  1.0f,  3.0f,  0.001f};
@@ -79,9 +80,7 @@ TEST_CASE(relu_forward_neg_zero_pos) {
 
     run_relu_forward_gpu(h_input, h_output, n);
 
-    if (!check_array_close(h_output, expected, n, 1e-6f, 1e-6f)) {
-        throw std::runtime_error("ReLU forward: negative/zero/positive mismatch");
-    }
+    REQUIRE(check_array_close(h_output, expected, n, 1e-6f, 1e-6f));
 }
 
 // Test 2: Backward pass — gradient routing verification
@@ -94,7 +93,7 @@ TEST_CASE(relu_forward_neg_zero_pos) {
 //   - Gradients pass through where input > 0
 //   - Gradients blocked (zeroed) where input ≤ 0
 //   - Gradient values preserved exactly (no scaling)
-TEST_CASE(relu_backward_gradient_routing) {
+TEST_CASE("relu_backward_gradient_routing", "[puzzle_04_relu]") {
     const int n = 8;
 
     float h_input[]       = {-2.0f,  3.5f, -0.1f,  1.7f,  0.0f, -4.2f,  0.8f, -0.01f};
@@ -104,9 +103,7 @@ TEST_CASE(relu_backward_gradient_routing) {
 
     run_relu_backward_gpu(h_grad_output, h_input, h_grad_input, n);
 
-    if (!check_array_close(h_grad_input, expected, n, 1e-6f, 1e-6f)) {
-        throw std::runtime_error("ReLU backward: gradient routing mismatch");
-    }
+    REQUIRE(check_array_close(h_grad_input, expected, n, 1e-6f, 1e-6f));
 }
 
 // Test 3: Round-trip — forward then backward, large random array
@@ -117,7 +114,7 @@ TEST_CASE(relu_backward_gradient_routing) {
 //   3. Check: grad_input matches CPU reference
 //
 // Uses 10000 elements to stress-test grid/block edge cases
-TEST_CASE(relu_round_trip) {
+TEST_CASE("relu_round_trip", "[puzzle_04_relu]") {
     const int n = 10000;
 
     std::vector<float> h_input(n);
@@ -144,17 +141,13 @@ TEST_CASE(relu_round_trip) {
     // GPU: forward
     run_relu_forward_gpu(h_input.data(), h_output.data(), n);
 
-    if (!check_array_close(h_output.data(), expected_output.data(), n, 1e-6f, 1e-6f)) {
-        throw std::runtime_error("ReLU round-trip: forward pass mismatch");
-    }
+    REQUIRE(check_array_close(h_output.data(), expected_output.data(), n, 1e-6f, 1e-6f));
 
     // GPU: backward (using original input, not output)
     run_relu_backward_gpu(h_grad_output.data(), h_input.data(),
                           h_grad_input.data(), n);
 
-    if (!check_array_close(h_grad_input.data(), expected_grad.data(), n, 1e-6f, 1e-6f)) {
-        throw std::runtime_error("ReLU round-trip: backward pass mismatch");
-    }
+    REQUIRE(check_array_close(h_grad_input.data(), expected_grad.data(), n, 1e-6f, 1e-6f));
 }
 
 // Test 4: Edge case — behavior at exactly x=0
@@ -166,7 +159,7 @@ TEST_CASE(relu_round_trip) {
 //
 // This test uses values very close to zero on both sides to verify
 // the boundary is handled correctly.
-TEST_CASE(relu_edge_case_zero) {
+TEST_CASE("relu_edge_case_zero", "[puzzle_04_relu]") {
     const int n = 8;
 
     // Values at and very near zero
@@ -177,9 +170,7 @@ TEST_CASE(relu_edge_case_zero) {
     // Forward: check boundary values
     run_relu_forward_gpu(h_input, h_output, n);
 
-    if (!check_array_close(h_output, expected_fwd, n, 1e-38f, 1e-6f)) {
-        throw std::runtime_error("ReLU edge case: forward at zero boundary mismatch");
-    }
+    REQUIRE(check_array_close(h_output, expected_fwd, n, 1e-38f, 1e-6f));
 
     // Backward: all grad_output = 1.0 to clearly see which gradients pass
     float h_grad_output[] = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
@@ -188,11 +179,6 @@ TEST_CASE(relu_edge_case_zero) {
 
     run_relu_backward_gpu(h_grad_output, h_input, h_grad_input, n);
 
-    if (!check_array_close(h_grad_input, expected_bwd, n, 1e-6f, 1e-6f)) {
-        throw std::runtime_error("ReLU edge case: backward at zero boundary mismatch");
-    }
+    REQUIRE(check_array_close(h_grad_input, expected_bwd, n, 1e-6f, 1e-6f));
 }
 
-int main() {
-    return RUN_ALL_TESTS();
-}

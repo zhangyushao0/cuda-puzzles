@@ -4,10 +4,9 @@
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
-#include <vector>
-#include <string>
 #include <random>
-#include <stdexcept>
+#include <string>
+#include <vector>
 
 // Tolerance-based comparison for floats
 // Formula: |a - b| <= atol + rtol * max(|a|, |b|)
@@ -45,73 +44,6 @@ inline bool check_array_close(const float* got, const float* expected, int n,
   }
   
   return all_pass;
-}
-
-// Test result output with formatted output
-inline void print_test_result(const char* name, bool passed, const char* details = nullptr) {
-  if (passed) {
-    printf("[PASS] %s\n", name);
-  } else {
-    printf("[FAIL] %s", name);
-    if (details) {
-      printf(": %s", details);
-    }
-    printf("\n");
-  }
-}
-
-// Lightweight test framework
-struct TestCase {
-  const char* name;
-  void (*func)();
-  bool passed;
-};
-
-static std::vector<TestCase>& get_test_registry() {
-  static std::vector<TestCase> tests;
-  return tests;
-}
-
-// Test case registration macro
-#define TEST_CASE(test_name) \
-  static void test_##test_name(); \
-  static struct TestRegistrar_##test_name { \
-    TestRegistrar_##test_name() { \
-      TestCase tc; \
-      tc.name = #test_name; \
-      tc.func = test_##test_name; \
-      tc.passed = false; \
-      get_test_registry().push_back(tc); \
-    } \
-  } test_registrar_##test_name; \
-  static void test_##test_name()
-
-// Run all registered tests
-inline int RUN_ALL_TESTS() {
-  auto& tests = get_test_registry();
-  int passed = 0;
-  int total = tests.size();
-  
-  printf("\n=== Running %d tests ===\n\n", total);
-  
-  for (auto& test : tests) {
-    try {
-      test.func();
-      test.passed = true;
-      printf("[PASS] %s\n", test.name);
-      passed++;
-    } catch (const std::exception& e) {
-      test.passed = false;
-      printf("[FAIL] %s: %s\n", test.name, e.what());
-    } catch (...) {
-      test.passed = false;
-      printf("[FAIL] %s: Unknown exception\n", test.name);
-    }
-  }
-  
-  printf("\n=== %d/%d tests passed ===\n", passed, total);
-  
-  return (passed == total) ? 0 : 1;
 }
 
 // Deterministic random seed setup

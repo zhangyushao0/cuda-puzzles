@@ -1,3 +1,4 @@
+#include <catch2/catch_test_macros.hpp>
 // Puzzle 06: Fully Connected Layer (Backward Pass) — Test Harness
 //
 // Tests:
@@ -185,7 +186,7 @@ void run_fc_backward_gpu(const float* h_grad_output, const float* h_input,
 //   dX[1][1] = 0.2*0.2 + 0.8*0.5 = 0.44
 //   dX[1][2] = 0.2*0.3 + 0.8*0.6 = 0.54
 
-TEST_CASE(fc_backward_small_example) {
+TEST_CASE("fc_backward_small_example", "[puzzle_06_fc_backward]") {
     const int batch = 2, in_features = 3, out_features = 2;
 
     float h_input[] = {1.0f, 2.0f, 3.0f,
@@ -245,7 +246,7 @@ TEST_CASE(fc_backward_small_example) {
 //
 // Compare to analytical dW[j][i] with relative error < 1e-3.
 
-TEST_CASE(fc_backward_numerical_gradient_check) {
+TEST_CASE("fc_backward_numerical_gradient_check", "[puzzle_06_fc_backward]") {
     const int batch = 2, in_features = 4, out_features = 3;
     const float epsilon = 1e-3f;
     const float rel_tol = 1e-3f;
@@ -404,7 +405,7 @@ TEST_CASE(fc_backward_numerical_gradient_check) {
 // Test 3: LeNet FC1 dimensions (batch=4, 256→120)
 // ============================================================
 
-TEST_CASE(fc_backward_lenet_fc1_dims) {
+TEST_CASE("fc_backward_lenet_fc1_dims", "[puzzle_06_fc_backward]") {
     const int batch = 4, in_features = 256, out_features = 120;
 
     const int input_size   = batch * in_features;
@@ -475,7 +476,7 @@ TEST_CASE(fc_backward_lenet_fc1_dims) {
 // the correct number of meaningful (non-garbage) elements by
 // checking them against CPU reference at every index position.
 
-TEST_CASE(fc_backward_shape_verification) {
+TEST_CASE("fc_backward_shape_verification", "[puzzle_06_fc_backward]") {
     // Use non-square, non-power-of-2 dimensions to catch indexing bugs
     const int batch = 3, in_features = 5, out_features = 7;
 
@@ -544,6 +545,3 @@ TEST_CASE(fc_backward_shape_verification) {
     }
 }
 
-int main() {
-    return RUN_ALL_TESTS();
-}

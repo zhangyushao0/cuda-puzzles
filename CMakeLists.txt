@@ -18,6 +18,15 @@ message(STATUS "CUDA Architectures: ${CMAKE_CUDA_ARCHITECTURES}")
 # Enable CTest
 enable_testing()
 
+# Fetch Catch2 v3 for testing
+include(FetchContent)
+FetchContent_Declare(
+  Catch2
+  GIT_REPOSITORY https://github.com/catchorg/Catch2.git
+  GIT_TAG        v3.5.2
+)
+FetchContent_MakeAvailable(Catch2)
+
 # Add subdirectories
 add_subdirectory(common)
 add_subdirectory(puzzles)

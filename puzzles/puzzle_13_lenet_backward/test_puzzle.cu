@@ -1,3 +1,4 @@
+#include <catch2/catch_test_macros.hpp>
 // Puzzle 13: LeNet-5 Backward Pass — Test Harness
 //
 // Tests:
@@ -337,7 +338,7 @@ void run_forward_backward_gpu(const float* h_input, const float* h_labels,
 // Test 1: Forward+backward with shapes verified
 // Verify that gradient shapes match parameter shapes and all gradients are finite
 // ============================================================
-TEST_CASE(backward_shapes_verified) {
+TEST_CASE("backward_shapes_verified", "[puzzle_13_lenet_backward]") {
     const int batch = 4;
 
     std::vector<float> h_input(batch * 1 * 28 * 28);
@@ -411,7 +412,7 @@ TEST_CASE(backward_shapes_verified) {
 // For each parameter group, perturb 5 random params and compare
 // ∂L/∂p ≈ (L(p+ε) - L(p-ε)) / (2ε)
 // ============================================================
-TEST_CASE(numerical_gradient_check) {
+TEST_CASE("numerical_gradient_check", "[puzzle_13_lenet_backward]") {
     const int batch = 2;
     const float eps = 1e-3f;
     const float rel_tol = 1e-2f;  // relaxed for deep chain
@@ -523,7 +524,7 @@ TEST_CASE(numerical_gradient_check) {
 // Test 3: Loss decrease after SGD step
 // Run forward, backward, SGD update, forward again -> loss should decrease
 // ============================================================
-TEST_CASE(loss_decreases_after_sgd) {
+TEST_CASE("loss_decreases_after_sgd", "[puzzle_13_lenet_backward]") {
     const int batch = 4;
     const float lr = 0.01f;
 
@@ -632,7 +633,7 @@ TEST_CASE(loss_decreases_after_sgd) {
 // Test 4: Gradient magnitude sanity check
 // Verify gradients are in reasonable ranges (not exploding/vanishing)
 // ============================================================
-TEST_CASE(gradient_magnitude_sanity) {
+TEST_CASE("gradient_magnitude_sanity", "[puzzle_13_lenet_backward]") {
     const int batch = 4;
 
     std::vector<float> h_input(batch * 1 * 28 * 28);
@@ -706,6 +707,3 @@ TEST_CASE(gradient_magnitude_sanity) {
     }
 }
 
-int main() {
-    return RUN_ALL_TESTS();
-}

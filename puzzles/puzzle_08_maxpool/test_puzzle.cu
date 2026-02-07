@@ -1,3 +1,4 @@
+#include <catch2/catch_test_macros.hpp>
 // Puzzle 08: Max Pooling (Forward + Backward) — Test Harness
 //
 // Tests:
@@ -200,7 +201,7 @@ void run_maxpool_backward_gpu(const float* h_grad_output, const int* h_max_indic
 //   4 is at (1,0) → index 2    6 is at (1,0) → index 2
 //   8 is at (0,1) → index 1    9 is at (0,1) → index 1
 
-TEST_CASE(maxpool_forward_4x4) {
+TEST_CASE("maxpool_forward_4x4", "[puzzle_08_maxpool]") {
     const int batch = 1, C = 1, H = 4, W = 4;
     const int H_out = 2, W_out = 2;
 
@@ -224,9 +225,7 @@ TEST_CASE(maxpool_forward_4x4) {
                             batch, C, H, W);
 
     // Check output values
-    if (!check_array_close(h_output, expected_output, H_out * W_out, 1e-5f, 1e-5f)) {
-        throw std::runtime_error("4x4 forward: output values mismatch");
-    }
+    REQUIRE(check_array_close(h_output, expected_output, H_out * W_out, 1e-5f, 1e-5f));
 
     // Check max indices
     bool indices_ok = true;
@@ -260,7 +259,7 @@ TEST_CASE(maxpool_forward_4x4) {
 //   │  0 │  0 │  0 │  0 │
 //   └────┴────┴────┴────┘
 
-TEST_CASE(maxpool_backward_grad_routing) {
+TEST_CASE("maxpool_backward_grad_routing", "[puzzle_08_maxpool]") {
     const int batch = 1, C = 1, H = 4, W = 4;
 
     // First run forward to get max_indices
@@ -294,9 +293,7 @@ TEST_CASE(maxpool_backward_grad_routing) {
                              batch, C, H, W);
 
     // Check gradient values
-    if (!check_array_close(h_grad_input, expected_grad_input, H * W, 1e-5f, 1e-5f)) {
-        throw std::runtime_error("Backward: gradient routing mismatch");
-    }
+    REQUIRE(check_array_close(h_grad_input, expected_grad_input, H * W, 1e-5f, 1e-5f));
 
     // Verify sparsity: exactly 4 non-zero elements out of 16
     int nonzero_count = 0;
@@ -313,7 +310,7 @@ TEST_CASE(maxpool_backward_grad_routing) {
 // Test 3: LeNet Pool1 (24×24×6→12×12×6) and Pool2 (8×8×16→4×4×16)
 // ============================================================
 
-TEST_CASE(maxpool_lenet_dims) {
+TEST_CASE("maxpool_lenet_dims", "[puzzle_08_maxpool]") {
     bool pass = true;
 
     // Pool1: 24×24×6 → 12×12×6
@@ -426,7 +423,7 @@ TEST_CASE(maxpool_lenet_dims) {
 // with the top-left-first scan order).
 // The gradient should go to exactly one position per window.
 
-TEST_CASE(maxpool_all_equal) {
+TEST_CASE("maxpool_all_equal", "[puzzle_08_maxpool]") {
     const int batch = 1, C = 1, H = 4, W = 4;
     const int H_out = 2, W_out = 2;
 
@@ -453,9 +450,7 @@ TEST_CASE(maxpool_all_equal) {
                             batch, C, H, W);
 
     // Check output values
-    if (!check_array_close(h_output, expected_output, H_out * W_out, 1e-5f, 1e-5f)) {
-        throw std::runtime_error("All-equal: output values mismatch");
-    }
+    REQUIRE(check_array_close(h_output, expected_output, H_out * W_out, 1e-5f, 1e-5f));
 
     // Check indices — all should be 0 (top-left)
     bool indices_ok = true;
@@ -486,11 +481,6 @@ TEST_CASE(maxpool_all_equal) {
     run_maxpool_backward_gpu(h_grad_output, h_max_indices, h_grad_input,
                              batch, C, H, W);
 
-    if (!check_array_close(h_grad_input, expected_grad_input, H * W, 1e-5f, 1e-5f)) {
-        throw std::runtime_error("All-equal: backward gradient routing mismatch");
-    }
+    REQUIRE(check_array_close(h_grad_input, expected_grad_input, H * W, 1e-5f, 1e-5f));
 }
 
-int main() {
-    return RUN_ALL_TESTS();
-}

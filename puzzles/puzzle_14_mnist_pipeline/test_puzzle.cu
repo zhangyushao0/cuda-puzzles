@@ -1,3 +1,4 @@
+#include <catch2/catch_test_macros.hpp>
 // Puzzle 14: MNIST Data Pipeline — Test Suite
 //
 // Tests:
@@ -41,7 +42,7 @@ static std::string data_path(const char* filename) {
 // Test 1: Load bundled mini-subset (100 images, 100 labels)
 // Verify header parsing, correct count, and dimensions
 // ---------------------------------------------------------------
-TEST_CASE(load_mini_subset) {
+TEST_CASE("load_mini_subset", "[puzzle_14_mnist_pipeline]") {
     float* images = nullptr;
     int count = 0, rows = 0, cols = 0;
     std::string img_path = data_path("mini-images-idx3-ubyte");
@@ -94,7 +95,7 @@ TEST_CASE(load_mini_subset) {
 // Test 2: Byte swap correctness
 // Verify swap_endian produces correct results for known values
 // ---------------------------------------------------------------
-TEST_CASE(byte_swap) {
+TEST_CASE("byte_swap", "[puzzle_14_mnist_pipeline]") {
     // Magic number: on disk as [0x00, 0x00, 0x08, 0x03]
     // Little-endian CPU reads: 0x03080000
     // After swap: 0x00000803
@@ -148,7 +149,7 @@ TEST_CASE(byte_swap) {
 // Test 3: Normalization — all pixel values in [0.0, 1.0]
 // Also verify raw byte correspondence: pixel_i / 255.0
 // ---------------------------------------------------------------
-TEST_CASE(normalization) {
+TEST_CASE("normalization", "[puzzle_14_mnist_pipeline]") {
     float* images = nullptr;
     int count = 0, rows = 0, cols = 0;
     std::string img_path = data_path("mini-images-idx3-ubyte");
@@ -204,7 +205,7 @@ TEST_CASE(normalization) {
 // ---------------------------------------------------------------
 // Test 4: Batch creation — correct number and sizes
 // ---------------------------------------------------------------
-TEST_CASE(batch_creation) {
+TEST_CASE("batch_creation", "[puzzle_14_mnist_pipeline]") {
     float* images = nullptr;
     int count = 0, rows = 0, cols = 0;
     std::string img_path = data_path("mini-images-idx3-ubyte");
@@ -298,7 +299,7 @@ TEST_CASE(batch_creation) {
 // ---------------------------------------------------------------
 // Test 5: Shuffle determinism — same seed produces same result
 // ---------------------------------------------------------------
-TEST_CASE(shuffle_determinism) {
+TEST_CASE("shuffle_determinism", "[puzzle_14_mnist_pipeline]") {
     // Load data twice for two independent shuffles
     float *images1 = nullptr, *images2 = nullptr;
     int *labels1 = nullptr, *labels2 = nullptr;
@@ -395,6 +396,3 @@ TEST_CASE(shuffle_determinism) {
     }
 }
 
-int main() {
-    return RUN_ALL_TESTS();
-}

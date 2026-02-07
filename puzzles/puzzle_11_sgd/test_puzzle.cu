@@ -1,3 +1,4 @@
+#include <catch2/catch_test_macros.hpp>
 // Puzzle 11: SGD Optimizer — Test Harness
 //
 // Tests:
@@ -95,7 +96,7 @@ void free_device(DevicePtrs& ptrs) {
 //   [1.0 - 0.05, 2.0 + 0.1, -0.5 - 0.2, 0.0 - 0.0, 3.0 - 0.01, -1.0 + 0.03, 0.25 - 0.0, 4.0 - 0.15]
 // = [0.95,        2.1,       -0.7,        0.0,        2.99,        -0.97,        0.25,        3.85]
 
-TEST_CASE(sgd_hardcoded_update) {
+TEST_CASE("sgd_hardcoded_update", "[puzzle_11_sgd]") {
     const int n = 8;
     const float lr = 0.1f;
 
@@ -105,9 +106,7 @@ TEST_CASE(sgd_hardcoded_update) {
 
     run_sgd_update_gpu(h_weights, h_gradients, lr, n);
 
-    if (!check_array_close(h_weights, expected, n, 1e-6f, 1e-6f)) {
-        throw std::runtime_error("SGD hardcoded update: w -= lr*grad mismatch");
-    }
+    REQUIRE(check_array_close(h_weights, expected, n, 1e-6f, 1e-6f));
 }
 
 // ============================================================
@@ -120,7 +119,7 @@ TEST_CASE(sgd_hardcoded_update) {
 // With correct SGD steps, loss should strictly decrease each step.
 // After enough steps, weights should converge toward the target.
 
-TEST_CASE(sgd_multi_step_loss_decrease) {
+TEST_CASE("sgd_multi_step_loss_decrease", "[puzzle_11_sgd]") {
     const int n = 16;
     const float lr = 0.1f;
     const int num_steps = 20;
@@ -185,7 +184,7 @@ TEST_CASE(sgd_multi_step_loss_decrease) {
 // Fill gradient array with non-zero values, run zero_gradients,
 // verify every element is exactly 0.0f.
 
-TEST_CASE(sgd_gradient_zeroing) {
+TEST_CASE("sgd_gradient_zeroing", "[puzzle_11_sgd]") {
     const int n = 1024;
 
     std::vector<float> h_gradients(n);
@@ -208,9 +207,7 @@ TEST_CASE(sgd_gradient_zeroing) {
 
     // Verify every element is exactly 0.0f
     std::vector<float> expected(n, 0.0f);
-    if (!check_array_close(h_gradients.data(), expected.data(), n, 0.0f, 0.0f)) {
-        throw std::runtime_error("Gradient zeroing: not all elements are 0.0f");
-    }
+    REQUIRE(check_array_close(h_gradients.data(), expected.data(), n, 0.0f, 0.0f));
 }
 
 // ============================================================
@@ -228,7 +225,7 @@ TEST_CASE(sgd_gradient_zeroing) {
 // This test verifies SGD works correctly at LeNet scale by
 // comparing GPU results against CPU reference.
 
-TEST_CASE(sgd_lenet_param_count) {
+TEST_CASE("sgd_lenet_param_count", "[puzzle_11_sgd]") {
     const int n = 44426;  // Total LeNet-5 parameters
     const float lr = 0.01f;
 
@@ -247,11 +244,6 @@ TEST_CASE(sgd_lenet_param_count) {
     // Run on GPU
     run_sgd_update_gpu(h_weights.data(), h_gradients.data(), lr, n);
 
-    if (!check_array_close(h_weights.data(), expected.data(), n, 1e-6f, 1e-6f)) {
-        throw std::runtime_error("LeNet param count: SGD mismatch at 44,426 parameters");
-    }
+    REQUIRE(check_array_close(h_weights.data(), expected.data(), n, 1e-6f, 1e-6f));
 }
 
-int main() {
-    return RUN_ALL_TESTS();
-}

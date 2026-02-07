@@ -1,3 +1,4 @@
+#include <catch2/catch_test_macros.hpp>
 // Puzzle 12: LeNet-5 Forward Pass — Test Harness
 //
 // Tests:
@@ -250,7 +251,7 @@ void run_lenet_gpu(const float* h_input, float* h_probs, int batch,
 // Test 1: Single image — output is 10 probabilities summing to 1.0
 // Verify that a single 28x28 input produces valid probability output
 // ============================================================
-TEST_CASE(lenet_single_image) {
+TEST_CASE("lenet_single_image", "[puzzle_12_lenet_forward]") {
     const int batch = 1;
 
     // Generate deterministic input and params
@@ -289,15 +290,13 @@ TEST_CASE(lenet_single_image) {
     }
 
     // Check: matches CPU reference
-    if (!check_array_close(h_probs.data(), expected.data(), 10, 1e-4f, 1e-3f)) {
-        throw std::runtime_error("Single image: GPU output doesn't match CPU reference");
-    }
+    REQUIRE(check_array_close(h_probs.data(), expected.data(), 10, 1e-4f, 1e-3f));
 }
 
 // ============================================================
 // Test 2: Batch of 8 — verify batch processing works
 // ============================================================
-TEST_CASE(lenet_batch_processing) {
+TEST_CASE("lenet_batch_processing", "[puzzle_12_lenet_forward]") {
     const int batch = 8;
 
     std::vector<float> h_input(batch * 1 * 28 * 28);
@@ -331,16 +330,14 @@ TEST_CASE(lenet_batch_processing) {
     }
 
     // Check: matches CPU reference
-    if (!check_array_close(h_probs.data(), expected.data(), batch * 10, 1e-4f, 1e-3f)) {
-        throw std::runtime_error("Batch of 8: GPU output doesn't match CPU reference");
-    }
+    REQUIRE(check_array_close(h_probs.data(), expected.data(), batch * 10, 1e-4f, 1e-3f));
 }
 
 // ============================================================
 // Test 3: Deterministic weights (seed=42) — verify exact probabilities
 // Run the same forward pass twice and confirm identical output
 // ============================================================
-TEST_CASE(lenet_deterministic) {
+TEST_CASE("lenet_deterministic", "[puzzle_12_lenet_forward]") {
     const int batch = 4;
 
     std::vector<float> h_input(batch * 1 * 28 * 28);
@@ -356,9 +353,7 @@ TEST_CASE(lenet_deterministic) {
     run_lenet_gpu(h_input.data(), probs2.data(), batch, hp);
 
     // Must be bit-exact across runs (same deterministic computation)
-    if (!check_array_close(probs1.data(), probs2.data(), batch * 10, 1e-6f, 1e-6f)) {
-        throw std::runtime_error("Deterministic test: two runs differ");
-    }
+    REQUIRE(check_array_close(probs1.data(), probs2.data(), batch * 10, 1e-6f, 1e-6f));
 
     // Also verify each sample has exactly one argmax (no all-zeros output)
     for (int b = 0; b < batch; b++) {
@@ -380,7 +375,7 @@ TEST_CASE(lenet_deterministic) {
 // Test 4: Intermediate dimensions — verify layer outputs
 // Use zero weights at specific layers to verify dimension correctness
 // ============================================================
-TEST_CASE(lenet_intermediate_dimensions) {
+TEST_CASE("lenet_intermediate_dimensions", "[puzzle_12_lenet_forward]") {
     const int batch = 2;
 
     // Create input where all pixels are 1.0
@@ -491,6 +486,3 @@ TEST_CASE(lenet_intermediate_dimensions) {
     CUDA_CHECK(cudaFree(d_input));
 }
 
-int main() {
-    return RUN_ALL_TESTS();
-}

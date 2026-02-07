@@ -1,3 +1,4 @@
+#include <catch2/catch_test_macros.hpp>
 // Puzzle 15: Full Training Loop — Test Harness
 //
 // Tests:
@@ -100,7 +101,7 @@ void free_dataset(SyntheticDataset& ds) {
 // Xavier Uniform: Var = 2 / (fan_in + fan_out) * (limit^2 / 3 is uniform var)
 // For Uniform(-a, a): mean=0, var=a^2/3
 // ============================================================
-TEST_CASE(xavier_init_distribution) {
+TEST_CASE("xavier_init_distribution", "[puzzle_15_training_loop]") {
     LeNetParams params;
     alloc_params(params);
 
@@ -208,7 +209,7 @@ TEST_CASE(xavier_init_distribution) {
 // Test 2: Single batch step — loss decreases
 // Take one gradient step and verify loss goes down
 // ============================================================
-TEST_CASE(single_batch_loss_decreases) {
+TEST_CASE("single_batch_loss_decreases", "[puzzle_15_training_loop]") {
     const int batch_size = 10;
     const float lr = 0.01f;
 
@@ -282,7 +283,7 @@ TEST_CASE(single_batch_loss_decreases) {
 // Test 3: Overfit 10 samples — achieve >95% accuracy
 // With 50 epochs on only 10 samples, the network should memorize them
 // ============================================================
-TEST_CASE(overfit_10_samples) {
+TEST_CASE("overfit_10_samples", "[puzzle_15_training_loop]") {
     const int num_samples = 10;
     const int batch_size = 10;
     const int num_epochs = 50;
@@ -338,7 +339,7 @@ TEST_CASE(overfit_10_samples) {
 // Test 4: Overfit 100 samples
 // With enough epochs, should achieve decent accuracy on 100 samples
 // ============================================================
-TEST_CASE(overfit_100_samples) {
+TEST_CASE("overfit_100_samples", "[puzzle_15_training_loop]") {
     const int num_samples = 100;
     const int batch_size = 32;
     const int num_epochs = 40;
@@ -398,7 +399,7 @@ TEST_CASE(overfit_100_samples) {
 // Test 5: Shape verification — all buffers have correct sizes
 // Verify no CUDA errors when allocating and using all structures
 // ============================================================
-TEST_CASE(shape_verification) {
+TEST_CASE("shape_verification", "[puzzle_15_training_loop]") {
     const int batch_size = 4;
 
     // Allocate all structures
@@ -525,6 +526,3 @@ TEST_CASE(shape_verification) {
     free_params(params);
 }
 
-int main() {
-    return RUN_ALL_TESTS();
-}

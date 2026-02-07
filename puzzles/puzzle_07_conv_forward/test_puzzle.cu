@@ -1,3 +1,4 @@
+#include <catch2/catch_test_macros.hpp>
 // Puzzle 07: 2D Convolution (Forward Pass) — Test Harness
 //
 // Tests:
@@ -109,7 +110,7 @@ void run_conv2d_forward_gpu(const float* h_input, const float* h_filters,
 //   out[2][0] = 11+12+13+16+17+18+21+22+23 = 153
 //   out[2][1] = 12+13+14+17+18+19+22+23+24 = 162
 //   out[2][2] = 13+14+15+18+19+20+23+24+25 = 171
-TEST_CASE(conv_single_3x3) {
+TEST_CASE("conv_single_3x3", "[puzzle_07_conv_forward]") {
     const int batch = 1, C_in = 1, H = 5, W = 5, C_out = 1, F = 3;
     const int H_out = H - F + 1;  // 3
     const int W_out = W - F + 1;  // 3
@@ -132,14 +133,12 @@ TEST_CASE(conv_single_3x3) {
     run_conv2d_forward_gpu(h_input, h_filters, h_bias, h_output,
                            batch, C_in, H, W, C_out, F);
 
-    if (!check_array_close(h_output, expected, H_out * W_out, 1e-4f, 1e-4f)) {
-        throw std::runtime_error("Single 3x3 convolution mismatch");
-    }
+    REQUIRE(check_array_close(h_output, expected, H_out * W_out, 1e-4f, 1e-4f));
 }
 
 // Test 2: LeNet Conv1 — 28×28×1 → 24×24×6, filter 5×5
 // Conv1 takes the single-channel 28×28 MNIST image and produces 6 feature maps
-TEST_CASE(conv_lenet_conv1) {
+TEST_CASE("conv_lenet_conv1", "[puzzle_07_conv_forward]") {
     const int batch = 1, C_in = 1, H = 28, W = 28, C_out = 6, F = 5;
     const int H_out = H - F + 1;  // 24
     const int W_out = W - F + 1;  // 24
@@ -171,7 +170,7 @@ TEST_CASE(conv_lenet_conv1) {
 
 // Test 3: LeNet Conv2 — 12×12×6 → 8×8×16, filter 5×5
 // Conv2 takes 6 feature maps (after pooling) and produces 16 feature maps
-TEST_CASE(conv_lenet_conv2) {
+TEST_CASE("conv_lenet_conv2", "[puzzle_07_conv_forward]") {
     const int batch = 1, C_in = 6, H = 12, W = 12, C_out = 16, F = 5;
     const int H_out = H - F + 1;  // 8
     const int W_out = W - F + 1;  // 8
@@ -203,7 +202,7 @@ TEST_CASE(conv_lenet_conv2) {
 
 // Test 4: Batch processing — batch=8 through Conv1 (28×28×1 → 24×24×6)
 // Verifies the kernel handles multiple images in a batch correctly
-TEST_CASE(conv_batch_processing) {
+TEST_CASE("conv_batch_processing", "[puzzle_07_conv_forward]") {
     const int batch = 8, C_in = 1, H = 28, W = 28, C_out = 6, F = 5;
     const int H_out = H - F + 1;  // 24
     const int W_out = W - F + 1;  // 24
@@ -236,7 +235,7 @@ TEST_CASE(conv_batch_processing) {
 // Test 5: Dimension check — verifies output dimensions match the formula
 // H_out = H - F + 1, W_out = W - F + 1
 // Conv1: (28-5)+1 = 24, Conv2: (12-5)+1 = 8
-TEST_CASE(conv_output_dimensions) {
+TEST_CASE("conv_output_dimensions", "[puzzle_07_conv_forward]") {
     // Test Conv1 dimensions: 28×28 with 5×5 filter → 24×24
     {
         const int batch = 1, C_in = 1, H = 28, W = 28, C_out = 1, F = 5;
@@ -296,6 +295,3 @@ TEST_CASE(conv_output_dimensions) {
     }
 }
 
-int main() {
-    return RUN_ALL_TESTS();
-}

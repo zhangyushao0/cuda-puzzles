@@ -1,3 +1,4 @@
+#include <catch2/catch_test_macros.hpp>
 // Puzzle 05: Softmax + Cross-Entropy Loss — Test Harness
 //
 // Tests:
@@ -147,7 +148,7 @@ void run_softmax_ce_backward_gpu(const float* h_probs, const float* h_labels,
 // ============================================================
 // Verifies the fundamental property: softmax output is a valid
 // probability distribution (all values in [0,1], sum = 1).
-TEST_CASE(softmax_probs_sum_to_one) {
+TEST_CASE("softmax_probs_sum_to_one", "[puzzle_05_softmax_ce]") {
     const int batch = 4, num_classes = 10;
     std::vector<float> h_logits(batch * num_classes);
     std::vector<float> h_probs(batch * num_classes, 0.0f);
@@ -186,7 +187,7 @@ TEST_CASE(softmax_probs_sum_to_one) {
 // This is the CRITICAL test: naive softmax (without max-subtraction)
 // will produce NaN/Inf for these logits. Only a stable implementation
 // using the max-subtraction trick will pass.
-TEST_CASE(softmax_numerical_stability) {
+TEST_CASE("softmax_numerical_stability", "[puzzle_05_softmax_ce]") {
     const int batch = 2, num_classes = 3;
 
     // Large logits that would cause exp() overflow without max-subtraction
@@ -234,10 +235,8 @@ TEST_CASE(softmax_numerical_stability) {
     }
 
     // Verify values match expected
-    if (!check_array_close(h_probs.data(), expected_probs, batch * num_classes,
-                           1e-4f, 1e-4f)) {
-        throw std::runtime_error("Large logits: softmax values don't match expected");
-    }
+    REQUIRE(check_array_close(h_probs.data(), expected_probs, batch * num_classes,
+                           1e-4f, 1e-4f));
 }
 
 // ============================================================
@@ -245,7 +244,7 @@ TEST_CASE(softmax_numerical_stability) {
 // ============================================================
 // Verifies CE loss against CPU reference with random probabilities and
 // one-hot labels.
-TEST_CASE(cross_entropy_loss_correctness) {
+TEST_CASE("cross_entropy_loss_correctness", "[puzzle_05_softmax_ce]") {
     const int batch = 8, num_classes = 10;
 
     // Generate random logits, compute softmax on CPU to get valid probs
@@ -274,17 +273,15 @@ TEST_CASE(cross_entropy_loss_correctness) {
     run_cross_entropy_loss_gpu(h_probs.data(), h_labels.data(),
                                h_losses.data(), batch, num_classes);
 
-    if (!check_array_close(h_losses.data(), expected_losses.data(), batch,
-                           1e-4f, 1e-4f)) {
-        throw std::runtime_error("Cross-entropy loss mismatch vs CPU reference");
-    }
+    REQUIRE(check_array_close(h_losses.data(), expected_losses.data(), batch,
+                           1e-4f, 1e-4f));
 }
 
 // ============================================================
 // Test 4: Backward gradient correctness
 // ============================================================
 // Verifies that grad_logits[b][c] = probs[b][c] - labels[b][c]
-TEST_CASE(backward_gradient_correctness) {
+TEST_CASE("backward_gradient_correctness", "[puzzle_05_softmax_ce]") {
     const int batch = 8, num_classes = 10;
 
     // Generate valid probabilities via softmax on CPU
@@ -313,10 +310,8 @@ TEST_CASE(backward_gradient_correctness) {
     run_softmax_ce_backward_gpu(h_probs.data(), h_labels.data(),
                                 h_grad.data(), batch, num_classes);
 
-    if (!check_array_close(h_grad.data(), expected_grad.data(),
-                           batch * num_classes, 1e-5f, 1e-5f)) {
-        throw std::runtime_error("Backward gradient mismatch vs CPU reference");
-    }
+    REQUIRE(check_array_close(h_grad.data(), expected_grad.data(),
+                           batch * num_classes, 1e-5f, 1e-5f));
 
     // Extra check: for the true class, gradient should be negative (prob < 1)
     // For wrong classes, gradient should be positive (prob > 0)
@@ -343,7 +338,7 @@ TEST_CASE(backward_gradient_correctness) {
 // ============================================================
 // Runs the full pipeline: logits → softmax → CE loss → backward
 // Verifies all three kernels work together correctly.
-TEST_CASE(round_trip_forward_backward) {
+TEST_CASE("round_trip_forward_backward", "[puzzle_05_softmax_ce]") {
     const int batch = 16, num_classes = 10;
     const int total = batch * num_classes;
 
@@ -384,22 +379,16 @@ TEST_CASE(round_trip_forward_backward) {
                                 h_grad_gpu.data(), batch, num_classes);
 
     // Verify softmax output
-    if (!check_array_close(h_probs_gpu.data(), h_probs_cpu.data(), total,
-                           1e-5f, 1e-5f)) {
-        throw std::runtime_error("Round-trip: softmax output mismatch");
-    }
+    REQUIRE(check_array_close(h_probs_gpu.data(), h_probs_cpu.data(), total,
+                           1e-5f, 1e-5f));
 
     // Verify CE loss
-    if (!check_array_close(h_losses_gpu.data(), h_losses_cpu.data(), batch,
-                           1e-4f, 1e-4f)) {
-        throw std::runtime_error("Round-trip: cross-entropy loss mismatch");
-    }
+    REQUIRE(check_array_close(h_losses_gpu.data(), h_losses_cpu.data(), batch,
+                           1e-4f, 1e-4f));
 
     // Verify backward gradient
-    if (!check_array_close(h_grad_gpu.data(), h_grad_cpu.data(), total,
-                           1e-5f, 1e-5f)) {
-        throw std::runtime_error("Round-trip: backward gradient mismatch");
-    }
+    REQUIRE(check_array_close(h_grad_gpu.data(), h_grad_cpu.data(), total,
+                           1e-5f, 1e-5f));
 
     // Verify gradient property: sum over classes ≈ 0 for each sample
     // (since Σ probs = 1 and Σ labels = 1, Σ (probs - labels) = 0)
@@ -418,6 +407,3 @@ TEST_CASE(round_trip_forward_backward) {
     }
 }
 
-int main() {
-    return RUN_ALL_TESTS();
-}
