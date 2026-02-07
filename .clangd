@@ -1,0 +1,22 @@
+CompileFlags:
+  Add:
+    - "-xcuda"
+    - "--cuda-gpu-arch=sm_75"
+    - "-I/usr/local/cuda/include"
+    - "-I/home/zys/repo/cuda-puzzles/build/_deps/catch2-src/src"
+    - "-I/home/zys/repo/cuda-puzzles/build/_deps/catch2-build/generated-includes"
+    - "-I/home/zys/repo/cuda-puzzles/common"
+  Remove:
+    - "-forward-unknown-to-host-compiler"
+    - "--generate-code=*"
+    - "-Xcompiler=*"
+    - "--options-file=*"
+    - "--options-file"
+    - "-arch=*"
+    - "-arch"
+
+Diagnostics:
+  Suppress:
+    - "unknown_cuda_version"
+    - "ovl_ambiguous_oper_binary"
+    

@@ -1,5 +1,13 @@
 cmake_minimum_required(VERSION 3.18)
+
+# Try to find nvcc if not automatically detected
+if(NOT DEFINED CMAKE_CUDA_COMPILER)
+  find_program(CMAKE_CUDA_COMPILER nvcc PATHS /usr/local/cuda/bin)
+endif()
 project(cuda-puzzles LANGUAGES CXX CUDA)
+
+# Export compile_commands.json for clangd
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Set C++ and CUDA standards
 set(CMAKE_CXX_STANDARD 17)
