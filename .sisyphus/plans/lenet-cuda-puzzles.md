@@ -70,11 +70,11 @@ Create 15 progressive CUDA C++ puzzles that teach students how to build a comple
 - Top-level `README.md` — Project overview, setup instructions, puzzle index
 
 ### Definition of Done
-- [ ] `cmake -B build -DCMAKE_CUDA_ARCHITECTURES=native && cmake --build build` succeeds with zero errors
-- [ ] Every `puzzle_XX_test` executable returns exit code 0 when run with reference solution
-- [ ] Every puzzle README renders correctly in terminal at 80 columns (ASCII art intact)
-- [ ] Full LeNet trained on MNIST achieves >95% test accuracy within 10 epochs
-- [ ] A student stuck on puzzle N can still attempt puzzle N+1 (independence verified)
+- [x] `cmake -B build -DCMAKE_CUDA_ARCHITECTURES=native && cmake --build build` succeeds with zero errors
+- [x] Every `puzzle_XX_test` executable returns exit code 0 when run with reference solution
+- [x] Every puzzle README renders correctly in terminal at 80 columns (ASCII art intact)
+- [x] Full LeNet trained on MNIST achieves >95% test accuracy within 10 epochs
+- [x] A student stuck on puzzle N can still attempt puzzle N+1 (independence verified)
 
 ### Must Have
 - Pure CUDA C++ — no external ML libraries, no cuDNN, no Python dependencies for core puzzles
@@ -247,7 +247,7 @@ Wave 4 (After Wave 3):
 
 ### Task 1: Project Infrastructure Setup
 
-- [ ] 1. Project Infrastructure — Git init, directory structure, root CMakeLists.txt
+- [x] 1. Project Infrastructure — Git init, directory structure, root CMakeLists.txt
 
   **What to do**:
   - Initialize git repository (`git init`)
@@ -363,7 +363,7 @@ Wave 4 (After Wave 3):
 
 ### Task 2: Common Utilities (CUDA Macros, Test Framework, MNIST Loader)
 
-- [ ] 2. Common Utilities — cuda_utils.h, test_utils.h, mnist_loader.h
+- [x] 2. Common Utilities — cuda_utils.h, test_utils.h, mnist_loader.h
 
   **What to do**:
   - Create `common/cuda_utils.h`:
@@ -507,7 +507,7 @@ Wave 4 (After Wave 3):
 
 ### Task 3: Puzzle 01 — Vector Addition (CUDA Warmup)
 
-- [ ] 3. Puzzle 01 — Vector Addition
+- [x] 3. Puzzle 01 — Vector Addition
 
   **What to do**:
   - Create `puzzles/puzzle_01_vector_add/` with: `README.md`, `puzzle.cu`, `solution.cu`, `test_puzzle.cu`, `CMakeLists.txt`
@@ -636,7 +636,7 @@ Wave 4 (After Wave 3):
 
 ### Task 4: Puzzle 02 — Matrix Multiplication
 
-- [ ] 4. Puzzle 02 — Matrix Multiplication (Naive)
+- [x] 4. Puzzle 02 — Matrix Multiplication (Naive)
 
   **What to do**:
   - Create `puzzles/puzzle_02_matmul/` with full puzzle structure
@@ -725,7 +725,7 @@ Wave 4 (After Wave 3):
 
 ### Task 5: Puzzle 03 — Fully Connected Layer Forward
 
-- [ ] 5. Puzzle 03 — FC Layer Forward Pass
+- [x] 5. Puzzle 03 — FC Layer Forward Pass
 
   **What to do**:
   - Create `puzzles/puzzle_03_fc_forward/`
@@ -817,7 +817,7 @@ Wave 4 (After Wave 3):
 
 ### Task 6: Puzzle 04 — ReLU Activation Forward + Backward
 
-- [ ] 6. Puzzle 04 — ReLU Forward and Backward Pass
+- [x] 6. Puzzle 04 — ReLU Forward and Backward Pass
 
   **What to do**:
   - Create `puzzles/puzzle_04_relu/`
@@ -920,7 +920,7 @@ Wave 4 (After Wave 3):
 
 ### Task 7: Puzzle 05 — Softmax + Cross-Entropy Loss
 
-- [ ] 7. Puzzle 05 — Softmax + Cross-Entropy Forward and Backward
+- [x] 7. Puzzle 05 — Softmax + Cross-Entropy Forward and Backward
 
   **What to do**:
   - Create `puzzles/puzzle_05_softmax_ce/`
@@ -1029,7 +1029,7 @@ Wave 4 (After Wave 3):
 
 ### Task 8: Puzzle 06 — FC Layer Backward Pass
 
-- [ ] 8. Puzzle 06 — FC Layer Backward Pass
+- [x] 8. Puzzle 06 — FC Layer Backward Pass
 
   **What to do**:
   - Create `puzzles/puzzle_06_fc_backward/`
@@ -1128,7 +1128,7 @@ Wave 4 (After Wave 3):
 
 ### Task 9: Puzzle 07 — Conv2D Forward Pass
 
-- [ ] 9. Puzzle 07 — 2D Convolution Forward Pass
+- [x] 9. Puzzle 07 — 2D Convolution Forward Pass
 
   **What to do**:
   - Create `puzzles/puzzle_07_conv_forward/`
@@ -1224,7 +1224,7 @@ Wave 4 (After Wave 3):
 
 ### Task 10: Puzzle 08 — Max Pooling Forward + Backward
 
-- [ ] 10. Puzzle 08 — Max Pooling Forward and Backward Pass
+- [x] 10. Puzzle 08 — Max Pooling Forward and Backward Pass
 
   **What to do**:
   - Create `puzzles/puzzle_08_maxpool/`
@@ -1316,7 +1316,7 @@ Wave 4 (After Wave 3):
 
 ### Task 11: Puzzle 09 — Conv2D Backward (Weight Gradients)
 
-- [ ] 11. Puzzle 09 — Conv2D Backward: Weight Gradients
+- [x] 11. Puzzle 09 — Conv2D Backward: Weight Gradients
 
   **What to do**:
   - Create `puzzles/puzzle_09_conv_backward_weights/`
@@ -1404,7 +1404,7 @@ Wave 4 (After Wave 3):
 
 ### Task 12: Puzzle 10 — Conv2D Backward (Input Gradients)
 
-- [ ] 12. Puzzle 10 — Conv2D Backward: Input Gradients
+- [x] 12. Puzzle 10 — Conv2D Backward: Input Gradients
 
   **What to do**:
   - Create `puzzles/puzzle_10_conv_backward_input/`
@@ -1490,7 +1490,7 @@ Wave 4 (After Wave 3):
 
 ### Task 13: Puzzle 11 — SGD Optimizer + Weight Update
 
-- [ ] 13. Puzzle 11 — SGD Optimizer and Weight Update Rule
+- [x] 13. Puzzle 11 — SGD Optimizer and Weight Update Rule
 
   **What to do**:
   - Create `puzzles/puzzle_11_sgd/`
@@ -1576,7 +1576,7 @@ Wave 4 (After Wave 3):
 
 ### Task 14: Puzzle 12 — LeNet Forward Pass (Full Network)
 
-- [ ] 14. Puzzle 12 — Complete LeNet-5 Forward Pass
+- [x] 14. Puzzle 12 — Complete LeNet-5 Forward Pass
 
   **What to do**:
   - Create `puzzles/puzzle_12_lenet_forward/`
@@ -1683,7 +1683,7 @@ Wave 4 (After Wave 3):
 
 ### Task 15: Puzzle 13 — LeNet Backward Pass (Full Backprop)
 
-- [ ] 15. Puzzle 13 — Complete LeNet-5 Backward Pass
+- [x] 15. Puzzle 13 — Complete LeNet-5 Backward Pass
 
   **What to do**:
   - Create `puzzles/puzzle_13_lenet_backward/`
@@ -1780,7 +1780,7 @@ Wave 4 (After Wave 3):
 
 ### Task 16: Puzzle 14 — MNIST Data Pipeline
 
-- [ ] 16. Puzzle 14 — MNIST Data Loading and Batching
+- [x] 16. Puzzle 14 — MNIST Data Loading and Batching
 
   **What to do**:
   - Create `puzzles/puzzle_14_mnist_pipeline/`
@@ -1882,7 +1882,7 @@ Wave 4 (After Wave 3):
 
 ### Task 17: Puzzle 15 — Full Training Loop
 
-- [ ] 17. Puzzle 15 — Complete LeNet Training Loop
+- [x] 17. Puzzle 15 — Complete LeNet Training Loop
 
   **What to do**:
   - Create `puzzles/puzzle_15_training_loop/`
@@ -2024,7 +2024,7 @@ Wave 4 (After Wave 3):
 
 ### Task 18: Final Integration Testing + Top-Level README
 
-- [ ] 18. Final Integration — Build-all test, top-level README, puzzle index
+- [x] 18. Final Integration — Build-all test, top-level README, puzzle index
 
   **What to do**:
   - Update top-level `README.md` with:
@@ -2187,13 +2187,13 @@ ctest --test-dir build --output-on-failure
 ```
 
 ### Final Checklist
-- [ ] All "Must Have" items present in every puzzle
-- [ ] All "Must NOT Have" items absent (no shared memory opt, no cuDNN, etc.)
-- [ ] All 15 puzzle READMEs have ASCII diagrams
-- [ ] All 15 puzzle READMEs have math formulas
-- [ ] All 15 puzzle test harnesses pass with reference solutions
-- [ ] All puzzle.cu files have clear `// TODO:` markers
-- [ ] Common utilities are shared (not duplicated per puzzle)
-- [ ] Build system works on Windows with MSVC + CUDA
-- [ ] Deterministic results with seed=42 across all puzzles
-- [ ] No puzzle requires internet access for basic testing (bundled test data)
+- [x] All "Must Have" items present in every puzzle
+- [x] All "Must NOT Have" items absent (no shared memory opt, no cuDNN, etc.)
+- [x] All 15 puzzle READMEs have ASCII diagrams
+- [x] All 15 puzzle READMEs have math formulas
+- [x] All 15 puzzle test harnesses pass with reference solutions
+- [x] All puzzle.cu files have clear `// TODO:` markers
+- [x] Common utilities are shared (not duplicated per puzzle)
+- [x] Build system works on Windows with MSVC + CUDA
+- [x] Deterministic results with seed=42 across all puzzles
+- [x] No puzzle requires internet access for basic testing (bundled test data)
