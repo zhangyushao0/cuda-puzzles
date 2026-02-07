@@ -15,6 +15,9 @@ endif()
 # Note: Minimum sm_75 (CUDA 13.x dropped sm_50-sm_70)
 message(STATUS "CUDA Architectures: ${CMAKE_CUDA_ARCHITECTURES}")
 
+# Enable CTest
+enable_testing()
+
 # Add subdirectories
 add_subdirectory(common)
 add_subdirectory(puzzles)
