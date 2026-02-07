@@ -1,0 +1,14 @@
+build/
+*.o
+*.exe
+*.exp
+*.lib
+.vs/
+data/*.idx3-ubyte
+data/*.idx1-ubyte
+.DS_Store
+CMakeCache.txt
+cmake_install.cmake
+CMakeFiles/
+*.sln
+*.vcxproj*
